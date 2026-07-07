@@ -34,3 +34,10 @@ npm run build
 
 All CV content lives in [`src/lib/cv-data.ts`](src/lib/cv-data.ts) —
 personal info, contact, skill groups, experience and education.
+
+## Updating the portfolio's CV.pdf
+
+The portfolio site (portfolio-v2) serves a static copy at `public/CV.pdf`.
+After changing CV content here, regenerate it: open this app, click
+"Print / Save as PDF" (or use headless Chrome's print-to-PDF) and save the
+result over `../portfolio-v2/public/CV.pdf`.
