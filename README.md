@@ -38,6 +38,14 @@ personal info, contact, skill groups, experience and education.
 ## Updating the portfolio's CV.pdf
 
 The portfolio site (portfolio-v2) serves a static copy at `public/CV.pdf`.
-After changing CV content here, regenerate it: open this app, click
-"Print / Save as PDF" (or use headless Chrome's print-to-PDF) and save the
-result over `../portfolio-v2/public/CV.pdf`.
+After changing CV content here, regenerate it with:
+
+```bash
+npm run export-pdf                  # writes ../portfolio-v2/public/CV.pdf
+npm run export-pdf -- --out my.pdf  # custom output path
+```
+
+The script renders the page in headless Chrome (same output as the
+"Print / Save as PDF" button). It reuses a running `next dev` server if one
+exists (via `.next/dev/lock`), otherwise it starts its own on port 4599 and
+shuts it down afterwards. Requires Chrome/Chromium (`CHROME_BIN` to override).

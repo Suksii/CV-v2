@@ -11,7 +11,7 @@
  * so nothing needs to be running beforehand.
  */
 import { spawn, execSync } from "node:child_process";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import os from "node:os";
@@ -19,7 +19,6 @@ import os from "node:os";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = 4599;
 const CDP_PORT = 9377;
-const URL = `http://localhost:${PORT}`;
 
 const outArgIdx = process.argv.indexOf("--out");
 const OUT =
@@ -49,7 +48,9 @@ const children = [];
 function cleanup() {
   for (const c of children) {
     try {
-      c.kill();
+      // negative pid = kill the whole process group (npx → next → next-server)
+      if (c.detachedGroup) process.kill(-c.pid, "SIGTERM");
+      else c.kill();
     } catch {}
   }
 }
@@ -70,30 +71,67 @@ async function waitFor(url, tries = 120, delay = 500) {
 function cdp(ws) {
   let id = 0;
   const pending = new Map();
+  const listeners = new Map();
   ws.addEventListener("message", (e) => {
     const m = JSON.parse(e.data);
     if (m.id && pending.has(m.id)) {
       pending.get(m.id)(m);
       pending.delete(m.id);
+    } else if (m.method && listeners.has(m.method)) {
+      for (const fn of listeners.get(m.method)) fn(m.params);
+      listeners.delete(m.method);
     }
   });
-  return (method, params = {}) =>
+  const send = (method, params = {}) =>
     new Promise((res, rej) => {
       const myId = ++id;
       pending.set(myId, (m) => (m.error ? rej(new Error(m.error.message)) : res(m.result)));
       ws.send(JSON.stringify({ id: myId, method, params }));
     });
+  // resolve once when a CDP event (e.g. Page.loadEventFired) arrives
+  send.once = (method) =>
+    new Promise((res) => {
+      if (!listeners.has(method)) listeners.set(method, []);
+      listeners.get(method).push(res);
+    });
+  return send;
 }
 
-async function main() {
-  // 1. dev server
+/**
+ * Next 16 allows only one dev server per project dir. If one is already
+ * running (`.next/dev/lock` holds its appUrl), reuse it; otherwise spawn
+ * our own on PORT and kill it when done.
+ */
+async function resolveServerUrl() {
+  try {
+    const lock = JSON.parse(readFileSync(resolve(root, ".next/dev/lock"), "utf8"));
+    if (lock.appUrl) {
+      const r = await fetch(lock.appUrl).catch(() => null);
+      if (r?.ok) {
+        console.log(`→ reusing running dev server at ${lock.appUrl}`);
+        return lock.appUrl;
+      }
+    }
+  } catch {}
+
+  const url = `http://localhost:${PORT}`;
   console.log(`→ starting next dev on :${PORT} …`);
+  // detached → own process group, so cleanup can kill next-server too,
+  // not just the npx wrapper
   const server = spawn("npx", ["next", "dev", "-p", String(PORT)], {
     cwd: root,
     stdio: "ignore",
+    detached: true,
   });
+  server.detachedGroup = true;
   children.push(server);
-  await waitFor(URL);
+  await waitFor(url);
+  return url;
+}
+
+async function main() {
+  // 1. dev server (existing or our own)
+  const URL = await resolveServerUrl();
 
   // 2. headless chrome
   const chromeBin = findChrome();
@@ -130,7 +168,11 @@ async function main() {
   console.log(`→ rendering ${URL} …`);
   await send("Page.enable");
   await send("Runtime.enable");
+  // subscribe to the load event *before* navigating, otherwise the
+  // Runtime.evaluate below runs against about:blank and prints an empty page
+  const loaded = send.once("Page.loadEventFired");
   await send("Page.navigate", { url: URL });
+  await loaded;
   await send("Runtime.evaluate", {
     expression: "document.fonts.ready.then(() => true)",
     awaitPromise: true,

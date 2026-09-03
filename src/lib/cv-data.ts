@@ -18,8 +18,8 @@ export const contact: ContactItem[] = [
   { label: "Phone", value: "+382 69 741 999", href: "tel:+38269741999", icon: "phone" },
   {
     label: "Email",
-    value: "ramovic225@gmail.com",
-    href: "mailto:ramovic225@gmail.com",
+    value: "sucoramovic96@gmail.com",
+    href: "mailto:sucoramovic96@gmail.com",
     icon: "mail",
   },
   {
@@ -31,8 +31,8 @@ export const contact: ContactItem[] = [
   { label: "GitHub", value: "Suksii", href: "https://github.com/Suksii", icon: "github" },
   {
     label: "Portfolio",
-    value: "suksii.github.io/portfolio",
-    href: "https://suksii.github.io/portfolio/",
+    value: "portfolio-v2-eight-mocha-15.vercel.app",
+    href: "https://portfolio-v2-eight-mocha-15.vercel.app/",
     icon: "globe",
   },
 ];
