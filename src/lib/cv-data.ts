@@ -31,8 +31,8 @@ export const contact: ContactItem[] = [
   { label: "GitHub", value: "Suksii", href: "https://github.com/Suksii", icon: "github" },
   {
     label: "Portfolio",
-    value: "portfolio-v2-eight-mocha-15.vercel.app",
-    href: "https://portfolio-v2-eight-mocha-15.vercel.app/",
+    value: "sucoramovic.vercel.app",
+    href: "https://sucoramovic.vercel.app/",
     icon: "globe",
   },
 ];
@@ -91,12 +91,24 @@ export const experience: Experience[] = [
         text: "Actively develop and maintain a large multi-module ERP system (React, TypeScript, TanStack Router & Query, Zustand, AG-Grid Enterprise, React Hook Form & Zod) covering sales, finance, warehouse, e-commerce, gastro/POS, personnel and mobile-sales modules, with internationalization, Sentry error monitoring and real-time updates.",
       },
       {
+        name: "Tehnoplus",
+        text: "Online store for one of Montenegro's largest consumer electronics retailers (Next.js App Router, TypeScript, TanStack Query) over a Laravel REST API: catalog, sale campaigns, product comparison, wishlist, checkout with online payment, user accounts and a separate B2B wholesale mode with customer-specific pricing and Excel catalog export. Cache Components with a custom disk cache handler, Sentry monitoring and a Vitest suite over checkout and pricing logic.",
+      },
+      {
+        name: "Lubenica",
+        text: "Online furniture and home store for a retailer with six shops in Montenegro (Next.js, TypeScript, TanStack Query, React Hook Form & Zod): catalog, advanced search, sale campaigns, cart and checkout with online payment, wishlist and user accounts.",
+      },
+      {
+        name: "Cvjećara Habitat",
+        text: "Bilingual (ME/EN) flower and gift shop in Next.js with a CMS-driven page builder, multi-step checkout with delivery scheduling, wishlist and newsletter integration, covered by a Vitest suite.",
+      },
+      {
         name: "Ksport",
-        text: "Modern headless Next.js storefront for a sportswear retailer (React, TypeScript, TailwindCSS, TanStack Query) with product catalog, cart & checkout, online payment, wishlist, user accounts and store locator.",
+        text: "Headless Next.js storefront for a sportswear retailer (React, TypeScript, TailwindCSS, TanStack Query) with product catalog, cart & checkout, online payment, wishlist, user accounts and store locator.",
       },
       {
         name: "BusTicket",
-        text: "Online bus-ticket booking platform in Next.js with 15-language localization (next-intl), route search, online & offline payment, ticket history, bus rental and an integrated chatbot.",
+        text: "Online bus-ticket booking platform in Next.js with 15-language localization (next-intl), route search, online & offline payment, ticket history, bus rental and an integrated AI chatbot.",
       },
       {
         name: "LevelUp & TimePlus",
@@ -104,14 +116,20 @@ export const experience: Experience[] = [
       },
     ],
     outro:
-      "Beyond these, I develop and maintain many other stores on the same custom PHP platform, and work on the Laravel REST API powering them — new endpoints, bug fixes and performance improvements. Daily stack: React.js, Next.js, TypeScript, Node.js, PHP/Laravel, TailwindCSS and SASS.",
+      "In total I maintain more than 50 projects in production. I work on the shared Laravel REST API powering the stores — new endpoints, bug fixes and performance improvements. Daily stack: React.js, Next.js, TypeScript, Node.js, PHP/Laravel, TailwindCSS and SASS.",
   },
   {
     position: "Web Developer",
     company: "Freelance",
     date: "Nov 2023 — Jun 2025",
-    description:
+    intro:
       "Designed and built responsive websites and web applications for government and private organizations. Delivered projects using HTML, CSS, JavaScript, React.js, Vue.js, Next.js, Node.js, SASS and TailwindCSS — from UI implementation to deployment.",
+    highlights: [
+      {
+        name: "Kata Agency",
+        text: "Bilingual site for an architecture and design studio, built solo end to end (Next.js, Prisma, PostgreSQL, next-intl), with a custom admin panel: JWT auth, TipTap rich-text editor and full CRUD over projects, services and news.",
+      },
+    ],
   },
   {
     position: "Software Engineer",

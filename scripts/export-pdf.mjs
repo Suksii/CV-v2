@@ -6,6 +6,7 @@
  * Usage:
  *   npm run export-pdf                 # writes ../portfolio-v2/public/CV.pdf
  *   npm run export-pdf -- --out my.pdf # custom output path
+ *   npm run export-pdf -- --path /dispatch --out my.pdf # other CV variant
  *
  * Spawns its own `next dev` server on port 4599 and a headless Chrome,
  * so nothing needs to be running beforehand.
@@ -25,6 +26,9 @@ const OUT =
   outArgIdx !== -1
     ? resolve(process.cwd(), process.argv[outArgIdx + 1])
     : resolve(root, "../portfolio-v2/public/CV.pdf");
+
+const pathArgIdx = process.argv.indexOf("--path");
+const PAGE_PATH = pathArgIdx !== -1 ? process.argv[pathArgIdx + 1] : "/";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -165,13 +169,14 @@ async function main() {
   const send = cdp(ws);
 
   // 3. render page, wait for fonts, print
-  console.log(`→ rendering ${URL} …`);
+  const pageUrl = new globalThis.URL(PAGE_PATH, URL).href;
+  console.log(`→ rendering ${pageUrl} …`);
   await send("Page.enable");
   await send("Runtime.enable");
   // subscribe to the load event *before* navigating, otherwise the
   // Runtime.evaluate below runs against about:blank and prints an empty page
   const loaded = send.once("Page.loadEventFired");
-  await send("Page.navigate", { url: URL });
+  await send("Page.navigate", { url: pageUrl });
   await loaded;
   await send("Runtime.evaluate", {
     expression: "document.fonts.ready.then(() => true)",
