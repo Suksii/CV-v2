@@ -1,6 +1,6 @@
 import { PrintButton } from "@/components/print-button";
 import { ContactIcon } from "@/components/contact-icon";
-import type { ContactItem, Experience, Education } from "@/lib/cv-data";
+import type { ContactItem, Experience, Education, Highlight } from "@/lib/cv-data";
 
 export type CvData = {
   person: { name: string; titles: readonly string[]; summary: string };
@@ -9,6 +9,30 @@ export type CvData = {
   experience: readonly Experience[];
   education: readonly Education[];
 };
+
+function ProjectName({ highlight }: { highlight: Highlight }) {
+  if (!highlight.links?.length) {
+    return <b className="font-semibold text-ink">{highlight.name}</b>;
+  }
+  return (
+    <>
+      {highlight.links.map((link, i) => (
+        <span key={link.url}>
+          {i > 0 && <b className="font-semibold text-ink"> & </b>}
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noreferrer"
+            className="font-semibold text-accent underline-offset-2 hover:underline"
+          >
+            {link.label}
+            <span aria-hidden className="ml-px text-[10px] align-[1px]">↗</span>
+          </a>
+        </span>
+      ))}
+    </>
+  );
+}
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -156,7 +180,7 @@ export function CvSheet({ person, contact, skillGroups, experience, education }:
                           >
                             <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-accent" />
                             <span>
-                              <b className="font-semibold text-ink">{h.name}</b> — {h.text}
+                              <ProjectName highlight={h} /> — {h.text}
                             </span>
                           </li>
                         ))}

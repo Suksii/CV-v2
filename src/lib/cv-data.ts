@@ -65,7 +65,10 @@ export const skillGroups = [
   },
 ] as const;
 
-export type Highlight = { name: string; text: string };
+export type ProjectLink = { label: string; url: string };
+
+/** `links` makes the project name(s) clickable in the PDF. */
+export type Highlight = { name: string; text: string; links?: ProjectLink[] };
 
 export type Experience = {
   position: string;
@@ -87,27 +90,36 @@ export const experience: Experience[] = [
     highlights: [
       {
         name: "TiramisuERP",
+        links: [{ label: "TiramisuERP", url: "https://tiramisuerp.com" }],
         text: "Multi-module ERP (sales, finance, warehouse, POS, mobile sales) in React, TypeScript, TanStack, Zustand and AG-Grid.",
       },
       {
         name: "Tehnoplus",
+        links: [{ label: "Tehnoplus", url: "https://tehnoplus.me" }],
         text: "Electronics store with online payment and a B2B wholesale mode.",
       },
       {
         name: "Lubenica",
+        links: [{ label: "Lubenica", url: "https://lubenicashop.me" }],
         text: "Furniture and home store for a retailer with six shops.",
       },
       {
         name: "Cvjećara Habitat",
+        links: [{ label: "Cvjećara Habitat", url: "https://cvjecarahabitat.me" }],
         text: "Bilingual flower shop with a CMS page builder.",
       },
-      { name: "Ksport", text: "Headless storefront for a sportswear retailer." },
+      { name: "Ksport", links: [{ label: "Ksport", url: "https://k-sport.me" }], text: "Headless storefront for a sportswear retailer." },
       {
         name: "BusTicket",
+        links: [{ label: "BusTicket", url: "https://busticket4.me" }],
         text: "Bus-ticket booking in 15 languages with online payment and an AI chatbot.",
       },
       {
         name: "LevelUp & TimePlus",
+        links: [
+          { label: "LevelUp", url: "https://level-up.me" },
+          { label: "TimePlus", url: "https://timeplus.me" },
+        ],
         text: "PHP-platform stores with full UI redesigns.",
       },
     ],
@@ -116,8 +128,14 @@ export const experience: Experience[] = [
     position: "Web Developer",
     company: "Freelance",
     date: "Nov 2023 — Jun 2025",
-    description:
-      "Websites and web apps for government and private clients (React, Vue.js, Next.js, Node.js). Built Kata Agency solo end to end: a bilingual studio site with a custom admin panel (Next.js, Prisma, PostgreSQL).",
+    intro: "Websites and web apps for government and private clients.",
+    highlights: [
+      {
+        name: "Kata Agency",
+        links: [{ label: "Kata Agency", url: "https://kataagency.com" }],
+        text: "Bilingual studio site with a custom admin panel, built solo end to end (Next.js, Prisma, PostgreSQL).",
+      },
+    ],
   },
   {
     position: "Software Engineer",
