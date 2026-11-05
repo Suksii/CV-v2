@@ -47,7 +47,7 @@ export function CvSheet({ person, contact, skillGroups, experience, education }:
         </header>
 
         {/* ---------- body ---------- */}
-        <div className="grid sm:grid-cols-[256px_1fr]">
+        <div className="sheet-body grid sm:grid-cols-[256px_1fr]">
           {/* sidebar */}
           <aside className="rise rise-2 space-y-8 border-b border-rule bg-accent-soft/50 px-7 py-7 sm:border-b-0 sm:border-r">
             <section>
@@ -63,7 +63,7 @@ export function CvSheet({ person, contact, skillGroups, experience, education }:
                         href={item.href}
                         target={item.href.startsWith("http") ? "_blank" : undefined}
                         rel="noreferrer"
-                        className="break-all font-medium text-ink underline-offset-2 hover:text-accent hover:underline"
+                        className="whitespace-nowrap font-medium tracking-[-0.01em] text-ink underline-offset-2 hover:text-accent hover:underline"
                       >
                         {item.value}
                       </a>
